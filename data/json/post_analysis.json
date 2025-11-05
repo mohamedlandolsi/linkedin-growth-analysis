@@ -42,7 +42,17 @@
     ],
     "has_call_to_action": true,
     "sentence_count": 12,
-    "line_count": 15
+    "line_count": 15,
+    "sentiment": {
+      "sentiment_label": "positive",
+      "compound_score": 0.9894,
+      "positive_score": 0.203,
+      "neutral_score": 0.755,
+      "negative_score": 0.041,
+      "intensity": "very positive",
+      "confidence": "high",
+      "interpretation": "Highly positive sentiment (score: 0.99) - Enthusiastic, excited, or celebratory tone"
+    }
   },
   "engagement_analysis": {
     "engagement_score": 70,

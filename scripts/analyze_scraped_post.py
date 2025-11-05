@@ -137,6 +137,30 @@ def print_analysis_report(analysis: Dict[str, Any]) -> None:
     else:
         print("No content elements available (post text is empty)")
     
+    # Sentiment analysis
+    if features and features.get('sentiment'):
+        sentiment = features['sentiment']
+        print("\n😊 SENTIMENT ANALYSIS:")
+        print("-"*80)
+        
+        # Display sentiment with emoji indicators
+        sentiment_emoji = {
+            'very positive': '😄',
+            'positive': '🙂',
+            'neutral': '😐',
+            'negative': '😟',
+            'very negative': '😠'
+        }
+        emoji = sentiment_emoji.get(sentiment['intensity'], '😐')
+        
+        print(f"Overall Sentiment: {emoji} {sentiment['sentiment_label'].upper()} ({sentiment['intensity']})")
+        print(f"Compound Score: {sentiment['compound_score']} (range: -1 to +1)")
+        print(f"  • Positive: {sentiment['positive_score']:.1%}")
+        print(f"  • Neutral:  {sentiment['neutral_score']:.1%}")
+        print(f"  • Negative: {sentiment['negative_score']:.1%}")
+        print(f"Confidence: {sentiment['confidence'].title()}")
+        print(f"\n💭 {sentiment['interpretation']}")
+    
     # Engagement analysis
     print("\n🎯 ENGAGEMENT ANALYSIS:")
     print("-"*80)

@@ -9,6 +9,13 @@ import re
 from typing import Dict, List, Any
 from collections import Counter
 
+# Import sentiment analyzer
+try:
+    from sentiment_analyzer import analyze_sentiment
+    SENTIMENT_AVAILABLE = True
+except ImportError:
+    SENTIMENT_AVAILABLE = False
+
 
 def extract_post_features(post_text: str) -> Dict[str, Any]:
     """
@@ -90,6 +97,11 @@ def extract_post_features(post_text: str) -> Dict[str, Any]:
     # Count sentences and lines
     features['sentence_count'] = _count_sentences(post_text)
     features['line_count'] = len(post_text.split('\n'))
+    
+    # Add sentiment analysis if available
+    if SENTIMENT_AVAILABLE:
+        sentiment = analyze_sentiment(post_text)
+        features['sentiment'] = sentiment
     
     return features
 
