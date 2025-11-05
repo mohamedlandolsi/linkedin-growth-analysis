@@ -27,28 +27,105 @@ st.set_page_config(
 # Custom CSS for professional styling
 st.markdown("""
     <style>
+    /* Main container */
     .main {
         padding: 0rem 1rem;
+        background-color: #f5f7fa;
     }
+    
+    /* Metric boxes - make them stand out */
     .stMetric {
-        background-color: #f0f2f6;
-        padding: 10px;
-        border-radius: 5px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+    
+    .stMetric label {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+    }
+    
+    .stMetric [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-size: 24px !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Post text box - clear white background */
     .post-text {
         background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #e0e0e0;
-        margin: 10px 0;
+        padding: 25px;
+        border-radius: 12px;
+        border: 2px solid #0073b1;
+        margin: 15px 0;
         font-size: 16px;
-        line-height: 1.6;
+        line-height: 1.8;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        color: #1a1a1a;
     }
+    
+    /* Section headers - LinkedIn blue */
     .section-header {
         color: #0073b1;
-        font-weight: 600;
-        margin-top: 20px;
-        margin-bottom: 10px;
+        font-weight: 700;
+        font-size: 28px;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        border-bottom: 3px solid #0073b1;
+        padding-bottom: 10px;
+    }
+    
+    /* Card backgrounds */
+    [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"] {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+    
+    /* Make dividers more visible */
+    hr {
+        border: none;
+        height: 3px;
+        background: linear-gradient(90deg, #0073b1 0%, #00a0dc 100%);
+        margin: 30px 0;
+    }
+    
+    /* Dataframe styling */
+    .stDataFrame {
+        border: 2px solid #0073b1;
+        border-radius: 8px;
+    }
+    
+    /* Header styling */
+    h1 {
+        color: #0073b1 !important;
+        font-weight: 700 !important;
+    }
+    
+    h2 {
+        color: #0073b1 !important;
+        font-weight: 600 !important;
+    }
+    
+    h3 {
+        color: #00a0dc !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Make markdown text more visible */
+    .stMarkdown {
+        color: #1a1a1a;
+    }
+    
+    /* Plotly charts background */
+    .js-plotly-plot {
+        background-color: #ffffff !important;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -105,42 +182,51 @@ def create_sentiment_gauge(sentiment_score):
     
     # Determine color based on sentiment
     if sentiment_score >= 0.5:
-        color = "green"
+        color = "#28a745"  # Strong green
         label = "Very Positive"
     elif sentiment_score >= 0.05:
-        color = "lightgreen"
+        color = "#7cb342"  # Light green
         label = "Positive"
     elif sentiment_score >= -0.05:
-        color = "gray"
+        color = "#9e9e9e"  # Gray
         label = "Neutral"
     elif sentiment_score >= -0.5:
-        color = "orange"
+        color = "#ff9800"  # Orange
         label = "Negative"
     else:
-        color = "red"
+        color = "#dc3545"  # Red
         label = "Very Negative"
     
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=normalized_score,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': f"<b>{label}</b><br><span style='font-size:0.8em'>Compound Score: {sentiment_score:.3f}</span>"},
-        delta={'reference': 50},
+        title={
+            'text': f"<b>{label}</b><br><span style='font-size:0.8em; color:#1a1a1a;'>Compound Score: {sentiment_score:.3f}</span>",
+            'font': {'size': 18, 'color': '#0073b1'}
+        },
+        delta={'reference': 50, 'increasing': {'color': '#28a745'}, 'decreasing': {'color': '#dc3545'}},
+        number={'font': {'size': 40, 'color': color, 'weight': 'bold'}},
         gauge={
-            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
-            'bar': {'color': color},
-            'bgcolor': "white",
-            'borderwidth': 2,
-            'bordercolor': "gray",
+            'axis': {
+                'range': [None, 100],
+                'tickwidth': 2,
+                'tickcolor': "#0073b1",
+                'tickfont': {'size': 12, 'color': '#1a1a1a'}
+            },
+            'bar': {'color': color, 'thickness': 0.8},
+            'bgcolor': "#f8f9fa",
+            'borderwidth': 3,
+            'bordercolor': "#0073b1",
             'steps': [
-                {'range': [0, 25], 'color': 'rgba(255, 0, 0, 0.2)'},
-                {'range': [25, 45], 'color': 'rgba(255, 165, 0, 0.2)'},
-                {'range': [45, 55], 'color': 'rgba(128, 128, 128, 0.2)'},
-                {'range': [55, 75], 'color': 'rgba(144, 238, 144, 0.2)'},
-                {'range': [75, 100], 'color': 'rgba(0, 128, 0, 0.2)'}
+                {'range': [0, 25], 'color': 'rgba(220, 53, 69, 0.3)'},   # Red zone
+                {'range': [25, 45], 'color': 'rgba(255, 152, 0, 0.3)'},  # Orange zone
+                {'range': [45, 55], 'color': 'rgba(158, 158, 158, 0.3)'}, # Gray zone
+                {'range': [55, 75], 'color': 'rgba(124, 179, 66, 0.3)'},  # Light green
+                {'range': [75, 100], 'color': 'rgba(40, 167, 69, 0.3)'}   # Strong green
             ],
             'threshold': {
-                'line': {'color': "red", 'width': 4},
+                'line': {'color': "#dc3545", 'width': 4},
                 'thickness': 0.75,
                 'value': 90
             }
@@ -148,9 +234,9 @@ def create_sentiment_gauge(sentiment_score):
     ))
     
     fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font={'color': "darkblue", 'family': "Arial"},
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#ffffff",
+        font={'color': "#1a1a1a", 'family': "Arial"},
         height=300,
         margin=dict(l=20, r=20, t=80, b=20)
     )
@@ -164,21 +250,29 @@ def create_sentiment_breakdown_chart(pos, neu, neg):
         go.Bar(
             x=['Positive', 'Neutral', 'Negative'],
             y=[pos * 100, neu * 100, neg * 100],
-            marker_color=['green', 'gray', 'red'],
+            marker_color=['#28a745', '#6c757d', '#dc3545'],
+            marker_line_color='rgba(0,0,0,0.3)',
+            marker_line_width=2,
             text=[f'{pos*100:.1f}%', f'{neu*100:.1f}%', f'{neg*100:.1f}%'],
-            textposition='outside'
+            textposition='outside',
+            textfont=dict(size=14, color='#1a1a1a', family='Arial', weight='bold')
         )
     ])
     
     fig.update_layout(
-        title="Sentiment Component Breakdown",
+        title={
+            'text': "Sentiment Component Breakdown",
+            'font': {'size': 18, 'color': '#0073b1', 'family': 'Arial', 'weight': 'bold'}
+        },
         yaxis_title="Percentage",
         xaxis_title="",
         showlegend=False,
         height=350,
-        yaxis={'range': [0, max(pos, neu, neg) * 110]},
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        yaxis={'range': [0, max(pos, neu, neg) * 110], 'gridcolor': '#e0e0e0'},
+        xaxis={'tickfont': {'size': 12, 'color': '#1a1a1a'}},
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#f8f9fa",
+        font={'color': '#1a1a1a'}
     )
     
     return fig
@@ -191,20 +285,28 @@ def create_engagement_comparison_chart(current, predicted, max_score=100):
             x=['Current Engagement', 'Predicted Score'],
             y=[current, predicted],
             marker_color=['#0073b1', '#00a0dc'],
+            marker_line_color='rgba(0,0,0,0.3)',
+            marker_line_width=2,
             text=[f'{current:.1f}', f'{predicted:.1f}/100'],
-            textposition='outside'
+            textposition='outside',
+            textfont=dict(size=14, color='#1a1a1a', family='Arial', weight='bold')
         )
     ])
     
     fig.update_layout(
-        title="Engagement: Current vs Predicted Performance",
+        title={
+            'text': "Engagement: Current vs Predicted Performance",
+            'font': {'size': 18, 'color': '#0073b1', 'family': 'Arial', 'weight': 'bold'}
+        },
         yaxis_title="Score",
         xaxis_title="",
         showlegend=False,
         height=350,
-        yaxis={'range': [0, max_score * 1.1]},
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        yaxis={'range': [0, max_score * 1.1], 'gridcolor': '#e0e0e0'},
+        xaxis={'tickfont': {'size': 12, 'color': '#1a1a1a'}},
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#f8f9fa",
+        font={'color': '#1a1a1a'}
     )
     
     return fig
@@ -218,30 +320,50 @@ def create_score_breakdown_chart(base_score, quality_bonus, max_base=60, max_bon
             x=['Engagement Score'],
             y=[base_score],
             marker_color='#0073b1',
+            marker_line_color='rgba(0,0,0,0.3)',
+            marker_line_width=2,
             text=f'{base_score:.1f}/{max_base}',
-            textposition='inside'
+            textposition='inside',
+            textfont=dict(size=14, color='#ffffff', family='Arial', weight='bold')
         ),
         go.Bar(
             name='Quality Bonus',
             x=['Engagement Score'],
             y=[quality_bonus],
             marker_color='#00a0dc',
+            marker_line_color='rgba(0,0,0,0.3)',
+            marker_line_width=2,
             text=f'{quality_bonus:.1f}/{max_bonus}',
-            textposition='inside'
+            textposition='inside',
+            textfont=dict(size=14, color='#ffffff', family='Arial', weight='bold')
         )
     ])
     
     fig.update_layout(
         barmode='stack',
-        title="Score Breakdown: Base + Quality Bonus",
+        title={
+            'text': "Score Breakdown: Base + Quality Bonus",
+            'font': {'size': 18, 'color': '#0073b1', 'family': 'Arial', 'weight': 'bold'}
+        },
         yaxis_title="Points",
         xaxis_title="",
         showlegend=True,
         height=300,
-        yaxis={'range': [0, 100]},
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        yaxis={'range': [0, 100], 'gridcolor': '#e0e0e0'},
+        xaxis={'tickfont': {'size': 12, 'color': '#1a1a1a'}},
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#f8f9fa",
+        font={'color': '#1a1a1a'},
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1,
+            bgcolor='rgba(255,255,255,0.8)',
+            bordercolor='#0073b1',
+            borderwidth=2
+        )
     )
     
     return fig
@@ -249,16 +371,24 @@ def create_score_breakdown_chart(base_score, quality_bonus, max_base=60, max_bon
 
 def create_audience_relevance_chart(df_top_10):
     """Create a horizontal bar chart for top 10 audience members."""
+    
+    # Create color array based on scores
+    colors = df_top_10['relevance_score'].apply(
+        lambda x: '#28a745' if x >= 80 else '#ffc107' if x >= 40 else '#dc3545'
+    )
+    
     fig = go.Figure(data=[
         go.Bar(
             x=df_top_10['relevance_score'],
             y=df_top_10['profile_name'],
             orientation='h',
-            marker_color=df_top_10['relevance_score'].apply(
-                lambda x: 'green' if x >= 80 else 'orange' if x >= 40 else 'red'
+            marker=dict(
+                color=colors,
+                line=dict(color='rgba(0,0,0,0.3)', width=2)
             ),
             text=df_top_10['relevance_score'].apply(lambda x: f'{x:.0f}'),
             textposition='outside',
+            textfont=dict(size=14, color='#1a1a1a', family='Arial', weight='bold'),
             hovertemplate='<b>%{y}</b><br>' +
                          'Score: %{x:.0f}/100<br>' +
                          '<extra></extra>'
@@ -266,15 +396,19 @@ def create_audience_relevance_chart(df_top_10):
     ])
     
     fig.update_layout(
-        title="Top 10 Most Relevant Audience Members",
+        title={
+            'text': "Top 10 Most Relevant Audience Members",
+            'font': {'size': 18, 'color': '#0073b1', 'family': 'Arial', 'weight': 'bold'}
+        },
         xaxis_title="Relevance Score",
         yaxis_title="",
         showlegend=False,
         height=400,
-        xaxis={'range': [0, 105]},
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        yaxis={'autorange': 'reversed'}
+        xaxis={'range': [0, 105], 'gridcolor': '#e0e0e0'},
+        yaxis={'autorange': 'reversed', 'tickfont': {'size': 12, 'color': '#1a1a1a'}},
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#f8f9fa",
+        font={'color': '#1a1a1a'}
     )
     
     return fig
@@ -563,16 +697,16 @@ def display_audience_fit(audience_df):
     display_df.columns = ['Name', 'Job Title', 'Company', 'Industry', 'Score', 'Priority', 'Match Reason']
     display_df['Score'] = display_df['Score'].apply(lambda x: f"{x:.0f}/100")
     
-    # Color code by priority
+    # Color code by priority using newer API
     def color_priority(val):
         if val == 'Hot':
-            return 'background-color: #d4edda'
+            return 'background-color: #d4edda; color: #155724; font-weight: bold;'
         elif val == 'Warm':
-            return 'background-color: #fff3cd'
+            return 'background-color: #fff3cd; color: #856404; font-weight: bold;'
         else:
-            return 'background-color: #f8d7da'
+            return 'background-color: #f8d7da; color: #721c24; font-weight: bold;'
     
-    styled_df = display_df.style.applymap(color_priority, subset=['Priority'])
+    styled_df = display_df.style.map(color_priority, subset=['Priority'])
     st.dataframe(styled_df, width='stretch', height=400)
 
 
