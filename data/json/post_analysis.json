@@ -54,15 +54,6 @@
       "interpretation": "Highly positive sentiment (score: 0.99) - Enthusiastic, excited, or celebratory tone"
     }
   },
-  "engagement_analysis": {
-    "engagement_score": 70,
-    "has_strong_hook": false,
-    "readability_score": "Medium",
-    "recommendations": [
-      "Add relevant hashtags to increase discoverability",
-      "Post is lengthy - consider breaking into shorter paragraphs"
-    ]
-  },
   "engagement_prediction": {
     "engagement_score": 72.78,
     "prediction_label": "High Performer",
@@ -132,5 +123,6 @@
       "#️⃣ Add hashtags: Use 3-5 relevant hashtags to increase discoverability."
     ],
     "percentile": "top 30%"
-  }
+  },
+  "analysis_timestamp": "2025-11-05T13:23:47.407955"
 }
