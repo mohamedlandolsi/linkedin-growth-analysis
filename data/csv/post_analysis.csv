@@ -1,0 +1,6 @@
+﻿post_id,post_text,extracted_at,author,browser_used,word_count,character_count,hashtag_count,emoji_count,url_count,has_cta,sentiment_label,sentiment_score,sentiment_intensity,sentiment_positive_pct,sentiment_negative_pct,current_likes,current_comments,current_shares,total_engagement,predicted_engagement_score,performance_label,prediction_confidence,percentile_rank,base_score,quality_bonus,extraction_status
+=== SUMMARY STATISTICS ===,Total Posts: 1,Generated: 2025-11-05 12:54,,,Avg: 213,Avg: 1381,Avg: 0.0,Avg: 5.0,Total: 1,1 posts,Positive: 1,Avg: 0.99,,,,Total: 97,Total: 7,Total: 15,Total: 119,Avg: 72.8,High: 1,,,,,
+POST-734687709153,🌍 We're proud to announce the launch of our AI for Climate Resilience Program.  AI already powers ev...,2025-11-05T12:21:45.072000,"Klarna
+Klarna
+383,360 followers
+383,360 followers",Brave,213,1381,0,5,1,Yes,Positive,0.9894,very positive,20.3%,4.1%,97,7,15,119,72.78,High Performer,High,top 30%,32.938494786138506,39.841,success
