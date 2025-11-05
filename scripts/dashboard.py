@@ -21,111 +21,193 @@ st.set_page_config(
     page_title="LinkedIn Post Analysis Dashboard",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': "LinkedIn Post Analysis Dashboard"
+    }
 )
 
 # Custom CSS for professional styling
 st.markdown("""
     <style>
-    /* Main container */
+    /* Force light theme and override dark mode */
+    .stApp {
+        background-color: #ffffff !important;
+    }
+    
+    /* Main container - white background */
     .main {
         padding: 0rem 1rem;
-        background-color: #f5f7fa;
+        background-color: #ffffff !important;
     }
     
-    /* Metric boxes - make them stand out */
-    .stMetric {
+    .block-container {
+        background-color: #ffffff !important;
+        padding-top: 2rem !important;
+    }
+    
+    /* All text should be dark */
+    .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown div {
+        color: #1a1a1a !important;
+    }
+    
+    /* Metric boxes - vibrant and visible */
+    [data-testid="stMetricValue"] {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 15px;
+        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    
-    .stMetric label {
         color: #ffffff !important;
-        font-weight: 600 !important;
-        font-size: 14px !important;
-    }
-    
-    .stMetric [data-testid="stMetricValue"] {
-        color: #ffffff !important;
-        font-size: 24px !important;
+        font-size: 28px !important;
         font-weight: 700 !important;
     }
     
-    /* Post text box - clear white background */
+    [data-testid="stMetricLabel"] {
+        color: #0073b1 !important;
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        background-color: #f0f8ff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+    
+    [data-testid="stMetricDelta"] {
+        color: #1a1a1a !important;
+    }
+    
+    /* Post text box - clear white background with border */
     .post-text {
-        background-color: #ffffff;
+        background-color: #ffffff !important;
         padding: 25px;
         border-radius: 12px;
-        border: 2px solid #0073b1;
+        border: 3px solid #0073b1;
         margin: 15px 0;
-        font-size: 16px;
+        font-size: 17px;
         line-height: 1.8;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        color: #1a1a1a;
+        box-shadow: 0 2px 8px rgba(0,115,177,0.15);
+        color: #1a1a1a !important;
     }
     
-    /* Section headers - LinkedIn blue */
+    /* Section headers - LinkedIn blue with underline */
     .section-header {
-        color: #0073b1;
-        font-weight: 700;
-        font-size: 28px;
-        margin-top: 30px;
-        margin-bottom: 15px;
-        border-bottom: 3px solid #0073b1;
-        padding-bottom: 10px;
-    }
-    
-    /* Card backgrounds */
-    [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"] {
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px 0;
-    }
-    
-    /* Make dividers more visible */
-    hr {
-        border: none;
-        height: 3px;
-        background: linear-gradient(90deg, #0073b1 0%, #00a0dc 100%);
-        margin: 30px 0;
-    }
-    
-    /* Dataframe styling */
-    .stDataFrame {
-        border: 2px solid #0073b1;
-        border-radius: 8px;
-    }
-    
-    /* Header styling */
-    h1 {
         color: #0073b1 !important;
         font-weight: 700 !important;
+        font-size: 32px !important;
+        margin-top: 30px !important;
+        margin-bottom: 15px !important;
+        border-bottom: 4px solid #0073b1 !important;
+        padding-bottom: 10px !important;
+        background-color: #f0f8ff !important;
+        padding-left: 15px !important;
+        padding-top: 10px !important;
+        border-radius: 8px 8px 0 0 !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #0073b1 !important;
+        font-weight: 700 !important;
+    }
+    
+    h1 {
+        font-size: 42px !important;
+        margin-bottom: 10px !important;
     }
     
     h2 {
-        color: #0073b1 !important;
-        font-weight: 600 !important;
+        font-size: 32px !important;
     }
     
     h3 {
         color: #00a0dc !important;
+        font-size: 24px !important;
+    }
+    
+    /* Make dividers more visible */
+    hr {
+        border: none !important;
+        height: 4px !important;
+        background: linear-gradient(90deg, #0073b1 0%, #00a0dc 50%, #0073b1 100%) !important;
+        margin: 35px 0 !important;
+        border-radius: 2px !important;
+    }
+    
+    /* Dataframe styling */
+    [data-testid="stDataFrame"] {
+        border: 3px solid #0073b1 !important;
+        border-radius: 8px !important;
+        background-color: #ffffff !important;
+    }
+    
+    /* Ensure all plotly charts have white background */
+    .js-plotly-plot, .plot-container, .plotly {
+        background-color: #ffffff !important;
+    }
+    
+    /* Column containers */
+    [data-testid="column"] {
+        background-color: #ffffff !important;
+    }
+    
+    /* Sidebar (if opened) */
+    [data-testid="stSidebar"] {
+        background-color: #f8f9fa !important;
+    }
+    
+    /* Footer text */
+    footer {
+        color: #6c757d !important;
+    }
+    
+    /* Links */
+    a {
+        color: #0073b1 !important;
         font-weight: 600 !important;
     }
     
-    /* Make markdown text more visible */
-    .stMarkdown {
-        color: #1a1a1a;
+    a:hover {
+        color: #00a0dc !important;
     }
     
-    /* Plotly charts background */
-    .js-plotly-plot {
+    /* Buttons */
+    .stButton > button {
+        background-color: #0073b1 !important;
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 10px 24px !important;
+        font-weight: 600 !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #00a0dc !important;
+    }
+    
+    /* Code blocks */
+    code {
+        background-color: #f0f8ff !important;
+        color: #0073b1 !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+    }
+    
+    /* Tables */
+    table {
         background-color: #ffffff !important;
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        color: #1a1a1a !important;
+    }
+    
+    th {
+        background-color: #0073b1 !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+    
+    td {
+        color: #1a1a1a !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -419,12 +501,12 @@ def display_header():
     col1, col2 = st.columns([3, 1])
     
     with col1:
-        st.title("📊 LinkedIn Post Analysis Dashboard")
-        st.markdown("**Comprehensive analysis of post performance, sentiment, and audience relevance**")
+        st.markdown("<h1 style='color: #0073b1; font-weight: 700;'>📊 LinkedIn Post Analysis Dashboard</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #1a1a1a; font-size: 18px; font-weight: 500;'>Comprehensive analysis of post performance, sentiment, and audience relevance</p>", unsafe_allow_html=True)
     
     with col2:
-        st.markdown(f"<div style='text-align: right; padding-top: 20px;'>"
-                   f"<small>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}</small></div>",
+        st.markdown(f"<div style='text-align: right; padding-top: 20px; color: #6c757d;'>"
+                   f"<small><strong>Generated:</strong><br>{datetime.now().strftime('%Y-%m-%d %H:%M')}</small></div>",
                    unsafe_allow_html=True)
 
 
@@ -531,17 +613,17 @@ def display_post_features(analysis_data):
     
     # Show lists if available
     if features.get('hashtags') and len(features['hashtags']) > 0:
-        st.markdown("**Hashtags:**")
-        st.write(", ".join(features['hashtags']))
+        st.markdown("<p style='color: #0073b1; font-weight: 600; margin-top: 15px;'>Hashtags:</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='color: #1a1a1a;'>{', '.join(features['hashtags'])}</p>", unsafe_allow_html=True)
     
     if features.get('mentions') and len(features['mentions']) > 0:
-        st.markdown("**Mentions:**")
-        st.write(", ".join(features['mentions']))
+        st.markdown("<p style='color: #0073b1; font-weight: 600; margin-top: 15px;'>Mentions:</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='color: #1a1a1a;'>{', '.join(features['mentions'])}</p>", unsafe_allow_html=True)
     
     if features.get('urls') and len(features['urls']) > 0:
-        st.markdown("**URLs:**")
+        st.markdown("<p style='color: #0073b1; font-weight: 600; margin-top: 15px;'>URLs:</p>", unsafe_allow_html=True)
         for url in features['urls']:
-            st.write(f"- {url}")
+            st.markdown(f"<p style='color: #1a1a1a;'>• {url}</p>", unsafe_allow_html=True)
 
 
 def display_sentiment_analysis(analysis_data):
@@ -646,11 +728,11 @@ def display_engagement_prediction(analysis_data, post_data):
     # Recommendations
     recommendations = prediction.get('recommendations', [])
     if recommendations:
-        st.markdown("**📌 Recommendations:**")
+        st.markdown("<p style='color: #0073b1; font-weight: 700; font-size: 18px; margin-top: 20px;'>📌 Recommendations:</p>", unsafe_allow_html=True)
         for rec in recommendations[:3]:  # Show top 3
             # Clean emoji from recommendations
             rec_clean = rec.replace('🔥', '').replace('✅', '').replace('💡', '').replace('⚠️', '').strip()
-            st.write(f"• {rec_clean}")
+            st.markdown(f"<p style='color: #1a1a1a; margin-left: 20px;'>• {rec_clean}</p>", unsafe_allow_html=True)
 
 
 def display_audience_fit(audience_df):
@@ -686,7 +768,7 @@ def display_audience_fit(audience_df):
     st.plotly_chart(fig_audience, width='stretch')
     
     # Detailed table for top 10
-    st.markdown("**📋 Top 10 Audience Members - Detailed View**")
+    st.markdown("<p style='color: #0073b1; font-weight: 700; font-size: 18px; margin-top: 20px;'>📋 Top 10 Audience Members - Detailed View</p>", unsafe_allow_html=True)
     
     display_df = df_top_10[[
         'profile_name', 'job_title', 'company', 'industry',
