@@ -96,53 +96,67 @@ def print_analysis_report(analysis: Dict[str, Any]) -> None:
     # Engagement metrics
     print("\n📊 ENGAGEMENT METRICS:")
     print("-"*80)
-    print(f"Likes: {scraped.get('likes', 0):,}")
-    print(f"Comments: {scraped.get('comments', 0):,}")
-    print(f"Shares: {scraped.get('shares', 0):,}")
+    likes = scraped.get('likes') or 0
+    comments = scraped.get('comments') or 0
+    shares = scraped.get('shares') or 0
     
-    total_engagement = (scraped.get('likes', 0) or 0) + \
-                      (scraped.get('comments', 0) or 0) + \
-                      (scraped.get('shares', 0) or 0)
-    print(f"Total Engagement: {total_engagement:,}")
+    print(f"Likes: {likes:,}" if likes else "Likes: N/A")
+    print(f"Comments: {comments:,}" if comments else "Comments: N/A")
+    print(f"Shares: {shares:,}" if shares else "Shares: N/A")
+    
+    total_engagement = likes + comments + shares
+    if total_engagement > 0:
+        print(f"Total Engagement: {total_engagement:,}")
+    else:
+        print("Total Engagement: N/A")
     
     # Text features
     print("\n📝 TEXT ANALYSIS:")
     print("-"*80)
-    print(f"Word Count: {features['word_count']}")
-    print(f"Character Count: {features['character_count']}")
-    print(f"Average Word Length: {features['average_word_length']}")
-    print(f"Unique Words: {features['unique_words']}")
-    print(f"Sentences: {features['sentence_count']}")
-    print(f"Lines: {features['line_count']}")
+    if features:
+        print(f"Word Count: {features.get('word_count', 0)}")
+        print(f"Character Count: {features.get('character_count', 0)}")
+        print(f"Average Word Length: {features.get('average_word_length', 0)}")
+        print(f"Unique Words: {features.get('unique_words', 0)}")
+        print(f"Sentences: {features.get('sentence_count', 0)}")
+        print(f"Lines: {features.get('line_count', 0)}")
+    else:
+        print("No text analysis available (post text is empty)")
     
     # Content elements
     print("\n🏷️ CONTENT ELEMENTS:")
     print("-"*80)
-    print(f"Hashtags ({features['hashtag_count']}): {', '.join(features['hashtags']) if features['hashtags'] else 'None'}")
-    print(f"Mentions ({features['mention_count']}): {', '.join(features['mentions']) if features['mentions'] else 'None'}")
-    print(f"URLs ({features['url_count']}): {features['url_count']} found")
-    print(f"Emojis ({features['emoji_count']}): {' '.join(features['emojis']) if features['emojis'] else 'None'}")
-    print(f"Call-to-Action: {'✅ Yes' if features['has_call_to_action'] else '❌ No'}")
-    if features['call_to_action_phrases']:
-        print(f"  CTA Phrases: {', '.join(features['call_to_action_phrases'])}")
+    if features:
+        print(f"Hashtags ({features.get('hashtag_count', 0)}): {', '.join(features.get('hashtags', [])) if features.get('hashtags') else 'None'}")
+        print(f"Mentions ({features.get('mention_count', 0)}): {', '.join(features.get('mentions', [])) if features.get('mentions') else 'None'}")
+        print(f"URLs ({features.get('url_count', 0)}): {features.get('url_count', 0)} found")
+        print(f"Emojis ({features.get('emoji_count', 0)}): {' '.join(features.get('emojis', [])) if features.get('emojis') else 'None'}")
+        print(f"Call-to-Action: {'✅ Yes' if features.get('has_call_to_action') else '❌ No'}")
+        if features.get('call_to_action_phrases'):
+            print(f"  CTA Phrases: {', '.join(features['call_to_action_phrases'])}")
+    else:
+        print("No content elements available (post text is empty)")
     
     # Engagement analysis
     print("\n🎯 ENGAGEMENT ANALYSIS:")
     print("-"*80)
-    print(f"Engagement Score: {engagement['engagement_score']}/100")
-    print(f"Readability: {engagement['readability_score']}")
-    print(f"Strong Hook: {'✅ Yes' if engagement['has_strong_hook'] else '❌ No'}")
-    
-    if engagement['recommendations']:
-        print(f"\n💡 RECOMMENDATIONS:")
-        for i, rec in enumerate(engagement['recommendations'], 1):
-            print(f"  {i}. {rec}")
+    if engagement:
+        print(f"Engagement Score: {engagement.get('engagement_score', 0)}/100")
+        print(f"Readability: {engagement.get('readability_score', 'N/A')}")
+        print(f"Strong Hook: {'✅ Yes' if engagement.get('has_strong_hook') else '❌ No'}")
+        
+        if engagement.get('recommendations'):
+            print(f"\n💡 RECOMMENDATIONS:")
+            for i, rec in enumerate(engagement['recommendations'], 1):
+                print(f"  {i}. {rec}")
+    else:
+        print("No engagement analysis available (post text is empty)")
     
     # Post preview
     print("\n📖 POST PREVIEW:")
     print("-"*80)
-    preview = scraped.get('post_text', 'N/A')
-    if len(preview) > 200:
+    preview = scraped.get('post_text') or 'N/A'
+    if preview != 'N/A' and len(preview) > 200:
         preview = preview[:200] + "..."
     print(preview)
     
