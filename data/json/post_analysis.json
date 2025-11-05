@@ -62,5 +62,75 @@
       "Add relevant hashtags to increase discoverability",
       "Post is lengthy - consider breaking into shorter paragraphs"
     ]
+  },
+  "engagement_prediction": {
+    "engagement_score": 72.78,
+    "prediction_label": "High Performer",
+    "confidence_level": "high",
+    "confidence_score": 95.0,
+    "base_score": 32.938494786138506,
+    "quality_bonus": 39.841,
+    "breakdown": {
+      "engagement": {
+        "likes": 97,
+        "comments": 7,
+        "shares": 15,
+        "weighted_total": 156.0,
+        "score": 32.94,
+        "weights_used": {
+          "likes": 1.0,
+          "comments": 2.0,
+          "shares": 3.0
+        }
+      },
+      "quality_features": {
+        "sentiment": {
+          "compound_score": 0.9894,
+          "sentiment_label": "positive",
+          "intensity": "very positive",
+          "bonus_points": 14.84,
+          "max_possible": 15.0
+        },
+        "word_count": {
+          "word_count": 213,
+          "optimal_range": "100-300",
+          "status": "optimal",
+          "bonus_points": 10.0,
+          "max_possible": 10.0
+        },
+        "hashtags": {
+          "hashtag_count": 0,
+          "optimal_range": "2-5",
+          "status": "too_few",
+          "bonus_points": 0.0,
+          "max_possible": 8.0
+        },
+        "emojis": {
+          "emoji_count": 5,
+          "status": "present",
+          "bonus_points": 5.0,
+          "max_possible": 5.0
+        },
+        "call_to_action": {
+          "has_call_to_action": true,
+          "bonus_points": 7.0,
+          "max_possible": 7.0
+        },
+        "urls": {
+          "url_count": 1,
+          "status": "present",
+          "bonus_points": 3.0,
+          "max_possible": 3.0
+        }
+      },
+      "confidence": {
+        "total_engagement": 119,
+        "explanation": "Based on substantial engagement data"
+      }
+    },
+    "recommendations": [
+      "#️⃣ Add hashtags: Use 3-5 relevant hashtags to increase discoverability."
+    ],
+    "percentile": "top 30%"
   }
 }

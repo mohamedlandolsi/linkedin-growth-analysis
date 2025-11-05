@@ -15,6 +15,13 @@ sys.path.append(str(Path(__file__).parent))
 
 from post_analyzer import extract_post_features, analyze_engagement_signals
 
+# Try to import engagement predictor
+try:
+    from engagement_predictor import predict_engagement_score
+    PREDICTOR_AVAILABLE = True
+except ImportError:
+    PREDICTOR_AVAILABLE = False
+
 
 def load_scraped_post(json_path: str = "data/json/post_data.json") -> Dict[str, Any]:
     """
@@ -60,11 +67,18 @@ def analyze_scraped_post(json_path: str = "data/json/post_data.json") -> Dict[st
     # Analyze engagement signals
     engagement = analyze_engagement_signals(features)
     
+    # Predict engagement performance if predictor available
+    prediction = None
+    if PREDICTOR_AVAILABLE:
+        sentiment_data = features.get('sentiment')
+        prediction = predict_engagement_score(post_data, sentiment_data, features)
+    
     # Combine all data
     result = {
         'scraped_data': post_data,
         'text_features': features,
-        'engagement_analysis': engagement
+        'engagement_analysis': engagement,
+        'engagement_prediction': prediction
     }
     
     return result
@@ -175,6 +189,40 @@ def print_analysis_report(analysis: Dict[str, Any]) -> None:
                 print(f"  {i}. {rec}")
     else:
         print("No engagement analysis available (post text is empty)")
+    
+    # Engagement prediction
+    prediction = analysis.get('engagement_prediction')
+    if prediction:
+        print("\n🔮 ENGAGEMENT PREDICTION:")
+        print("-"*80)
+        
+        # Display main prediction
+        label_emoji = {
+            'High Performer': '🚀',
+            'Medium': '📊',
+            'Low': '📉'
+        }
+        emoji = label_emoji.get(prediction['prediction_label'], '📊')
+        
+        print(f"Performance Forecast: {emoji} {prediction['prediction_label']}")
+        print(f"Predicted Score: {prediction['engagement_score']}/100 ({prediction['percentile']})")
+        print(f"  • Base Score (actual engagement): {prediction['base_score']:.1f}/60")
+        print(f"  • Quality Bonus (content features): {prediction['quality_bonus']:.1f}/40")
+        print(f"Confidence: {prediction['confidence_level'].title()} ({prediction['confidence_score']:.0f}%)")
+        
+        # Display score breakdown
+        if prediction.get('breakdown'):
+            eng_breakdown = prediction['breakdown'].get('engagement', {})
+            print(f"\nWeighted Engagement: {eng_breakdown.get('weighted_total', 0):.1f}")
+            print(f"  • Likes × 1.0 = {eng_breakdown.get('likes', 0)}")
+            print(f"  • Comments × 2.0 = {eng_breakdown.get('comments', 0) * 2}")
+            print(f"  • Shares × 3.0 = {eng_breakdown.get('shares', 0) * 3}")
+        
+        # Display top recommendations
+        if prediction.get('recommendations'):
+            print(f"\n🎯 OPTIMIZATION RECOMMENDATIONS:")
+            for i, rec in enumerate(prediction['recommendations'][:5], 1):
+                print(f"  {i}. {rec}")
     
     # Post preview
     print("\n📖 POST PREVIEW:")
